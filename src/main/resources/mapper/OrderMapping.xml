@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.fh.dao.OrderDao">
+    <select id="queryCount" resultType="long">
+        select count(*) from t_order where isDel = 0
+    </select>
+
+    <select id="queryOrderList" resultType="com.fh.entity.vo.OrderStr">
+        select o.*,p.pname as pname,p.price as price from t_order o left join t_product p
+          on o.productId = p.proId where isDel = 0 limit #{start},#{length}
+    </select>
+
+    <insert id="addOrder">
+        insert into t_order (productId,count,subtotal,isDel) values
+            (#{productId},#{count},#{subtotal},#{isDel})
+    </insert>
+
+    <update id="updateIsdel">
+        update t_order set isDel=1 where orderId=#{id}
+    </update>
+
+    <select id="queryOrderByIdList" resultType="com.fh.entity.vo.OrderStr">
+         select o.*,p.pname as pname,p.price as price from t_order o left join t_product p
+          on o.productId = p.proId where orderId = #{id}
+    </select>
+
+    <update id="updateOrder">
+        update t_order set productId=#{productId},count=#{count},subtotal=#{subtotal} where orderId = #{orderId}
+    </update>
+</mapper>
